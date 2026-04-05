@@ -31,6 +31,15 @@ public class GlobalException {
                 .body(Map.of("error", ex.getMessage()));
     }
 
+    // Handles Authentication Exceptions
+    @ExceptionHandler(org.springframework.security.core.AuthenticationException.class)
+    public ResponseEntity<Map<String, String>> handleAuthenticationException(
+            org.springframework.security.core.AuthenticationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Invalid email or password"));
+    }
+
     // Catches everything else
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(

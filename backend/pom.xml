@@ -30,7 +30,11 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.36.0</version>
+		</dependency>
 
 		<!-- JWT -->
 		<dependency>
@@ -38,6 +42,8 @@
 			<artifactId>jjwt-api</artifactId>
 			<version>0.12.3</version>
 		</dependency>
+
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
