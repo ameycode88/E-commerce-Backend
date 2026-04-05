@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+import org.springframework.http.HttpMethod;
 import java.util.List;
 
 @Configuration
@@ -41,14 +41,27 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                .authorizeHttpRequests(auth -> auth
+//                        // Public endpoints — no token needed
+//                        .requestMatchers("/api/auth/**").permitAll()
+//                        .requestMatchers("/api/products/**").permitAll()
+//                        .requestMatchers("/api/categories/**").permitAll()
+//                        // Everything else needs authentication
+//                        .anyRequest().authenticated()
+//                )
+
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints — no token needed
+                        // Allow CORS preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/products/**").permitAll()
-                        .requestMatchers("/api/categories/**").permitAll()
-                        // Everything else needs authentication
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+                        // Cart and addresses require authentication
+                        .requestMatchers("/api/cart/**").authenticated()
+                        .requestMatchers("/api/addresses/**").authenticated()
                         .anyRequest().authenticated()
                 )
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
