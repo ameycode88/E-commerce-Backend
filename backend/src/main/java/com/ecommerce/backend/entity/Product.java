@@ -1,5 +1,6 @@
 package com.ecommerce.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
 
     @Id
@@ -33,9 +35,11 @@ public class Product {
     private String imageUrl;
 
     @Column(name = "avg_rating", precision = 3, scale = 2)
+    @Builder.Default
     private BigDecimal avgRating = BigDecimal.ZERO;
 
     @Column(name = "is_active")
+    @Builder.Default
     private boolean active = true;
 
     @Column(name = "created_at")

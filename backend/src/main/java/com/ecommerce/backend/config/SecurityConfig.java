@@ -48,6 +48,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/api/categories/**").permitAll()
 //                        // Everything else needs authentication
 //                        .anyRequest().authenticated()
+
 //                )
 
                 .authorizeHttpRequests(auth -> auth
@@ -56,9 +57,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
-                        // Cart and addresses require authentication
+                        // Cart, addresses, and orders require authentication
                         .requestMatchers("/api/cart/**").authenticated()
                         .requestMatchers("/api/addresses/**").authenticated()
+                        .requestMatchers("/api/orders/**").authenticated()
                         .anyRequest().authenticated()
                 )
 
