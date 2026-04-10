@@ -33,7 +33,7 @@ public class OrderService {
     private BigDecimal discount;
     private String couponCode;
     private final CouponService couponService;
-
+    private final EmailService emailService;
     // ══════════════════════════════════════════════
     //  PLACE ORDER — the core business transaction
     //  @Transactional: ALL steps succeed or ALL fail
@@ -254,7 +254,16 @@ public class OrderService {
         }
 
         order.setStatus(nextStatus);
-        return toResponse(orderRepository.save(order));
+        Order savedOrder = orderRepository.save(order);
+        OrderResponse response = toResponse(savedOrder);
+        
+        if (nextStatus == OrderStatus.SHIPPED) {
+            emailService.sendOrderShipped(order.getUser().getEmail(), response);
+        } else if (nextStatus == OrderStatus.DELIVERED) {
+            emailService.sendOrderDelivered(order.getUser().getEmail(), response);
+        }
+
+        return response;
     }
 
     // ══════════════════════════════════════════════
